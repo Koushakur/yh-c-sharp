@@ -71,25 +71,24 @@ namespace ContactManagerConsole.Services
             };
         }
 
-        //ShowMenu Methods
         #region ShowMenu Methods
 
         /// <summary>
         /// Menu for adding a contact
         /// </summary>
-        public void ShowMenuAddContact() {
+        private void ShowMenuAddContact() {
             Console.WriteLine("Entering new contact");
             DrawLine();
-            var tContact = new Contact();
+            var tContact = new Contact {
+                FirstName = RequestInput("First name (Required): ", true),
+                LastName = RequestInput("Last name: "),
+                Email = RequestInput("E-mail (Required): ", true),
+                PhoneNumber = RequestInput("Phone number: ")
+            };
 
-            tContact.FirstName = RequestInput("First name (Required): ", true);
-            tContact.LastName = RequestInput("Last name: ");
-            tContact.Email = RequestInput("E-mail (Required): ", true);
-            tContact.PhoneNumber = RequestInput("Phone number: ");
-
-            string? selectionAddress = RequestInput("Add an address for this contact? (y/n): ", true, true);
-
-            if (_yesStrings.Contains(selectionAddress)) {
+            if (_yesStrings.Contains(
+                RequestInput("Add an address for this contact? (y/n): ", true, true)
+            )) {
                 Console.WriteLine("");
                 tContact.Address = RequestAddress();
             }
@@ -97,9 +96,7 @@ namespace ContactManagerConsole.Services
             Console.WriteLine("\nThis contact will be added: ");
             DisplayContact(tContact);
 
-            string? selectionConfirm = RequestInput("OK? (y/n): ", true, true);
-
-            if (_yesStrings.Contains(selectionConfirm)) {
+            if (_yesStrings.Contains(RequestInput("OK? (y/n): ", true, true))) {
                 _contactService.AddContact(tContact);
             }
         }
@@ -107,7 +104,7 @@ namespace ContactManagerConsole.Services
         /// <summary>
         /// Menu for removing a contact
         /// </summary>
-        public void ShowMenuRemoveContact() {
+        private void ShowMenuRemoveContact() {
         TryAgain:
             Console.Clear();
 
@@ -158,6 +155,7 @@ namespace ContactManagerConsole.Services
                 if (_yesStrings.Contains(RequestInput("OK to remove? (y/n): ", true, true))) {
                     _contactService.RemoveContact(foundContacts[result - 1].Id);
                 }
+
             } else {
                 if (_yesStrings.Contains(RequestInput("Failed to find any contact with that e-mail, try again? (y/n): ", true, true))) {
                     goto TryAgain;
@@ -168,15 +166,16 @@ namespace ContactManagerConsole.Services
         /// <summary>
         /// Menu for displaying all contacts and optionally detailed info for one contact
         /// </summary>
-        public void ShowMenuDisplayContacts() {
+        private void ShowMenuDisplayContacts() {
             DisplayContactsNumbered();
 
-            int selection = 0;
+            int selection;
 
             var tList = _contactService.GetContactList();
+            Console.WriteLine();
             do {
-                Console.WriteLine(selection);
-                int.TryParse(RequestInput("Which contact would you like to view detailed info for?: ", true), out selection);
+                selection = int.Parse(RequestInput("Which contact would you like to view detailed info for?: ", true));
+                Console.SetCursorPosition(0, Console.CursorTop - 1);
             } while (selection <= 0 || selection >= tList.Count());
 
             Console.WriteLine();
@@ -193,7 +192,7 @@ namespace ContactManagerConsole.Services
         /// <summary>
         /// Prints detailed information for all the contacts in the list
         /// </summary>
-        public void DisplayContactsDetailed() {
+        private void DisplayContactsDetailed() {
             try {
                 foreach (var customer in _contactService.GetContactList()) {
                     DisplayContact(customer);
@@ -206,7 +205,7 @@ namespace ContactManagerConsole.Services
         /// Displays all contacts in a numbered list<br/>
         /// Only name and email will be displayed. To display all info see DisplayContactsDetailed()
         /// </summary>
-        public void DisplayContactsNumbered() {
+        private void DisplayContactsNumbered() {
             try {
                 int i = 1;
                 foreach (var c in _contactService.GetContactList()) {
@@ -221,7 +220,7 @@ namespace ContactManagerConsole.Services
         /// Prints a contact's complete information to the console
         /// </summary>
         /// <param name="contact">Contact object to display info for</param>
-        public void DisplayContact(Contact contact) {
+        private static void DisplayContact(Contact contact) {
 
             try {
                 Console.WriteLine($"Name:   {contact.FullName}");
@@ -241,7 +240,7 @@ namespace ContactManagerConsole.Services
         /// Prints an address to the console
         /// </summary>
         /// <param name="address">Address to be printed</param>
-        public void DisplayAddress(Address address) {
+        private static void DisplayAddress(Address address) {
             Console.WriteLine("Address:");
             Console.WriteLine($"  {address.Street}, {address.City}");
             Console.WriteLine($"  {address.PostalCode} {address.Country}");
@@ -264,7 +263,7 @@ namespace ContactManagerConsole.Services
             string? tInput;
 
             while (string.IsNullOrWhiteSpace(tInput = Console.ReadLine()!.Trim())) {
-                if (!required) break;
+                if (!required) return "";
 
                 Console.SetCursorPosition(0, Console.CursorTop - 1);
                 Console.Write(displayText);
