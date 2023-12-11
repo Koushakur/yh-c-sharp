@@ -2,25 +2,25 @@
 
 namespace SharedLogic.Services
 {
-    public class FileService
+    internal class FileService
     {
         /// <summary>
         /// Saves content to a given file path
         /// </summary>
         /// <param name="filePath">Path to file to save content to</param>
         /// <param name="content">Content to put into the file</param>
-        public static void SaveToFile(string filePath, string content) {
+        /// <returns>true if file saved successfully, otherwise false</returns>
+        public static bool SaveToFile(string filePath, string content) {
             try {
                 var directory = Path.GetDirectoryName(filePath);
                 if (!Directory.Exists(directory)) {
                     Directory.CreateDirectory(directory!);
                 }
 
-                using (var f = new StreamWriter(filePath)) {
-                    f.Write(content);
-                }
+                File.WriteAllText(filePath, content);
             }
             catch (Exception e) { Debug.WriteLine(e); }
+            return true;
         }
 
         /// <summary>
@@ -31,8 +31,7 @@ namespace SharedLogic.Services
         public static string? ReadFromFile(string filePath) {
             try {
                 if (File.Exists(filePath)) {
-                    using var f = new StreamReader(filePath);
-                    return f.ReadToEnd();
+                    return File.ReadAllText(filePath);
                 }
             }
             catch (Exception e) { Debug.WriteLine(e); }
@@ -44,26 +43,32 @@ namespace SharedLogic.Services
         /// Cross-platform opening of a folder in respective file browsers
         /// </summary>
         /// <param name="folderPath">Path to folder to open</param>
-        public static void OpenFolder(string folderPath) {
+        /// <returns>true if successfully opened folder, otherwise false</returns>
+        public static bool OpenFolder(string folderPath) {
             try {
 
-                //Windows
-                if (OperatingSystem.IsWindows()) {
-                    Process.Start("explorer.exe", folderPath);
+                if (Directory.Exists(folderPath)) {
+                    //Windows
+                    if (OperatingSystem.IsWindows()) {
+                        Process.Start("explorer.exe", folderPath);
+                        return true;
 
-                    //Mac
-                } else if (OperatingSystem.IsMacOS()) {
-                    Process.Start("open", folderPath);
+                        //Mac
+                    } else if (OperatingSystem.IsMacOS()) {
+                        Process.Start("open", folderPath);
+                        return true;
 
-                    //Linux
-                } else if (OperatingSystem.IsLinux()) {
-                    Process.Start("xdg-open", folderPath);
+                        //Linux
+                    } else if (OperatingSystem.IsLinux()) {
+                        Process.Start("xdg-open", folderPath);
+                        return true;
 
-                } else {
-                    throw new NotSupportedException("Operating system not supported.");
+                    }
                 }
             }
             catch (Exception e) { Debug.WriteLine(e); }
+
+            return false;
         }
     }
 }

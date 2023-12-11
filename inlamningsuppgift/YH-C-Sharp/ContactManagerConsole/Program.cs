@@ -1,29 +1,14 @@
-﻿using SharedLogic.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using ContactManagerConsole.Services;
 using SharedLogic.Services;
 
-Console.WriteLine("Wello, Horld!");
+var builder = Host.CreateDefaultBuilder().ConfigureServices(services => {
+    services.AddSingleton<ContactService>();
+    services.AddSingleton<MenuService>();
+}).Build();
 
-CustomerService customerService = new();
+builder.Start();
+Console.Clear();
 
-
-customerService.AddCustomer(new Customer {
-    FirstName = "Ein",
-    LastName = "asd",
-    Email = "ab@ab.ab",
-    PhoneNumber = "1234567890"
-});
-
-customerService.AddCustomer(new Customer {
-    FirstName = "Zwei",
-    LastName = "dsa",
-    Email = "bab@bab.bab",
-    PhoneNumber = "c1234567890"
-});
-
-customerService.SaveCustomersToFile();
-
-var tList = customerService.GetCustomerList();
-
-customerService.DisplayAllCustomers();
-
-Console.ReadKey();
+builder.Services.GetRequiredService<MenuService>().StartMenuLoop();
