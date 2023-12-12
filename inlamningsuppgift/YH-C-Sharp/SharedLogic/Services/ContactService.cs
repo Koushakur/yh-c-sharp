@@ -26,20 +26,36 @@ namespace SharedLogic.Services
         }
 
         /// <summary>
-        /// Remove a contact from the list and re-save to file
+        /// Remove a contact from the list and then re-save to file
         /// </summary>
         /// <param name="email">E-mail to identify the user with</param>
         /// <returns>True if contact was successully removed, otherwise false</returns>
         public bool RemoveContact(string email) {
             try {
-                var foundContact = _contactList.Find(x => x.Email == email);
+                Contact foundContact = _contactList.Find(x => x.Email == email)!;
                 if (foundContact != null) {
                     _contactList.Remove(foundContact);
                     SaveContactsToFile();
                     return true;
                 }
             }
-            catch (Exception e) { Debug.WriteLine(e); return false; }
+            catch (Exception e) { Debug.WriteLine(e); }
+            return false;
+        }
+
+        /// <summary>
+        /// Tries to remove the supplied Contact object from the contactlist and then re-save the contact list
+        /// </summary>
+        /// <param name="contact">Contact to attempt to remove</param>
+        /// <returns>true if sucessfully removed, otherwise false</returns>
+        public bool RemoveContact(Contact contact) {
+            try {
+                if (_contactList.Remove(contact)) {
+                    SaveContactsToFile();
+                    return true;
+                }
+            }
+            catch (Exception e) { Debug.WriteLine(e); }
             return false;
         }
 
@@ -53,13 +69,16 @@ namespace SharedLogic.Services
                 if (_contactList.Remove(_contactList.Find(x => x.Id == contactId)!)) {
                     SaveContactsToFile();
                     return true;
-                } else {
-                    return false;
                 }
             }
-            catch (Exception e) { Debug.WriteLine(e); return false; }
+            catch (Exception e) { Debug.WriteLine(e); }
+            return false;
         }
 
+        /// <summary>
+        /// Not implemented
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
         public void UpdateContact() {
             throw new NotImplementedException("Can't update contacts yet");
         }

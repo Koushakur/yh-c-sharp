@@ -117,7 +117,7 @@ namespace ContactManagerConsole.Services
                 DisplayContact(foundContacts[0]);
 
                 if (_yesStrings.Contains(RequestInput("OK to remove? (y/n): ", true, true))) {
-                    if (_contactService.RemoveContact(foundContacts[0].Email)) {
+                    if (_contactService.RemoveContact(foundContacts[0])) {
                         Console.WriteLine("Successfully removed contact");
                         AnyKeyToContinue();
                     } else {
