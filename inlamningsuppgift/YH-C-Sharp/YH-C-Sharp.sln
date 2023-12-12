@@ -3,12 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManagerConsole", "ContactManagerConsole\ContactManagerConsole.csproj", "{7670C47D-03E5-465C-9310-5DD0189F9E98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManagerConsole", "ContactManagerConsole\ContactManagerConsole.csproj", "{7670C47D-03E5-465C-9310-5DD0189F9E98}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EE645E5A-FA94-48C3-95A7-8CADEA7E4C74} = {EE645E5A-FA94-48C3-95A7-8CADEA7E4C74}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedLogic", "SharedLogic\SharedLogic.csproj", "{EE645E5A-FA94-48C3-95A7-8CADEA7E4C74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLogic", "SharedLogic\SharedLogic.csproj", "{EE645E5A-FA94-48C3-95A7-8CADEA7E4C74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManagerMAUI", "ContactManagerMAUI\ContactManagerMAUI.csproj", "{974CA773-E5DD-4C28-B624-71A29732B297}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EE645E5A-FA94-48C3-95A7-8CADEA7E4C74} = {EE645E5A-FA94-48C3-95A7-8CADEA7E4C74}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +29,12 @@ Global
 		{EE645E5A-FA94-48C3-95A7-8CADEA7E4C74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE645E5A-FA94-48C3-95A7-8CADEA7E4C74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE645E5A-FA94-48C3-95A7-8CADEA7E4C74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{974CA773-E5DD-4C28-B624-71A29732B297}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{974CA773-E5DD-4C28-B624-71A29732B297}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{974CA773-E5DD-4C28-B624-71A29732B297}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{974CA773-E5DD-4C28-B624-71A29732B297}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{974CA773-E5DD-4C28-B624-71A29732B297}.Release|Any CPU.Build.0 = Release|Any CPU
+		{974CA773-E5DD-4C28-B624-71A29732B297}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
