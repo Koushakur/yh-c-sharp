@@ -10,10 +10,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManagerConsole", "Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLogic", "SharedLogic\SharedLogic.csproj", "{EE645E5A-FA94-48C3-95A7-8CADEA7E4C74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactManagerMAUI", "ContactManagerMAUI\ContactManagerMAUI.csproj", "{974CA773-E5DD-4C28-B624-71A29732B297}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManagerMAUI", "ContactManagerMAUI\ContactManagerMAUI.csproj", "{974CA773-E5DD-4C28-B624-71A29732B297}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EE645E5A-FA94-48C3-95A7-8CADEA7E4C74} = {EE645E5A-FA94-48C3-95A7-8CADEA7E4C74}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xUnitTests", "xUnitTests\xUnitTests.csproj", "{088AD80A-52A7-49F8-A682-4E450F98D3BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{974CA773-E5DD-4C28-B624-71A29732B297}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{974CA773-E5DD-4C28-B624-71A29732B297}.Release|Any CPU.Build.0 = Release|Any CPU
 		{974CA773-E5DD-4C28-B624-71A29732B297}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{088AD80A-52A7-49F8-A682-4E450F98D3BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{088AD80A-52A7-49F8-A682-4E450F98D3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{088AD80A-52A7-49F8-A682-4E450F98D3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{088AD80A-52A7-49F8-A682-4E450F98D3BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
