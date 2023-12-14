@@ -10,23 +10,26 @@ namespace SharedLogic.Services
         private readonly string _saveLocation = @".\save\contacts.json";
 
         public ContactService() {
-            ReadContactsFromFile();
+            if (!ReadContactsFromFile()) {
+                Debug.WriteLine("Failed to read contacts file");
+            }
         }
 
         /// <summary>
         /// Add a contact to the list and re-save to file
         /// </summary>
         /// <param name="contact">Contact to add</param>
-        public void AddContact(Contact contact) {
+        public bool AddContact(Contact contact) {
             try {
                 _contactList.Add(contact);
-                SaveContactsToFile();
+                return true;
             }
             catch (Exception e) { Debug.WriteLine(e); }
+            return false;
         }
 
         /// <summary>
-        /// Remove a contact from the list and then re-save to file
+        /// Remove a contact from the list
         /// </summary>
         /// <param name="email">E-mail to identify the user with</param>
         /// <returns>True if contact was successully removed, otherwise false</returns>
@@ -34,9 +37,7 @@ namespace SharedLogic.Services
             try {
                 Contact foundContact = _contactList.Find(x => x.Email == email)!;
                 if (foundContact != null) {
-                    _contactList.Remove(foundContact);
-                    SaveContactsToFile();
-                    return true;
+                    return _contactList.Remove(foundContact);
                 }
             }
             catch (Exception e) { Debug.WriteLine(e); }
@@ -44,32 +45,26 @@ namespace SharedLogic.Services
         }
 
         /// <summary>
-        /// Tries to remove the supplied Contact object from the contactlist and then re-save the contact list
+        /// Tries to remove the supplied Contact object from the contactlist
         /// </summary>
         /// <param name="contact">Contact to attempt to remove</param>
         /// <returns>true if sucessfully removed, otherwise false</returns>
         public bool RemoveContact(Contact contact) {
             try {
-                if (_contactList.Remove(contact)) {
-                    SaveContactsToFile();
-                    return true;
-                }
+                return _contactList.Remove(contact);
             }
             catch (Exception e) { Debug.WriteLine(e); }
             return false;
         }
 
         /// <summary>
-        /// Remove a contact from the list and re-save to file
+        /// Remove a contact from the list
         /// </summary>
         /// <param name="contactId">GUID to identify the user with</param>
         /// <returns>True if contact was successully removed, otherwise false</returns>
         public bool RemoveContact(Guid contactId) {
             try {
-                if (_contactList.Remove(_contactList.Find(x => x.Id == contactId)!)) {
-                    SaveContactsToFile();
-                    return true;
-                }
+                return _contactList.Remove(_contactList.Find(x => x.Id == contactId)!);
             }
             catch (Exception e) { Debug.WriteLine(e); }
             return false;
@@ -100,21 +95,22 @@ namespace SharedLogic.Services
         /// <summary>
         /// Save current list of contact to file at _savelocation
         /// </summary>
-        public void SaveContactsToFile() {
-            FileService.SaveToFile(_saveLocation, JsonConvert.SerializeObject(_contactList, Formatting.Indented));
+        public bool SaveContactsToFile() {
+            return FileService.SaveToFile(_saveLocation, JsonConvert.SerializeObject(_contactList, Formatting.None));
         }
 
         /// <summary>
         /// Retrieves list of contacts from _savelocation
         /// </summary>
-        private void ReadContactsFromFile() {
+        private bool ReadContactsFromFile() {
             try {
                 var readContent = FileService.ReadFromFile(_saveLocation);
                 if (!string.IsNullOrEmpty(readContent)) {
                     _contactList = JsonConvert.DeserializeObject<List<Contact>>(readContent)!;
-                }
+                } else return false;
             }
-            catch (Exception e) { Debug.WriteLine(e); }
+            catch (Exception e) { Debug.WriteLine(e); return false; }
+            return true;
         }
 
         /// <summary>

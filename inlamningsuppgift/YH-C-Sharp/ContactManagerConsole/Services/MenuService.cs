@@ -19,11 +19,11 @@ namespace ContactManagerConsole.Services
                 Console.Clear();
                 Console.WriteLine("WELCOME TO THE CONTACT MANAGER 2000");
                 DrawLine();
-                Console.WriteLine("1. Add contact");
-                Console.WriteLine("2. Remove contact");
-                Console.WriteLine("3. Display information");
-                Console.WriteLine("4. Open Folder");
-                Console.WriteLine("Q. Exit");
+                Console.WriteLine(" 1. Add contact");
+                Console.WriteLine(" 2. Remove contact");
+                Console.WriteLine(" 3. Display information");
+                Console.WriteLine(" 4. Open Folder");
+                Console.WriteLine(" Q. Exit");
                 DrawLine('=');
                 Console.WriteLine("");
 
@@ -59,7 +59,7 @@ namespace ContactManagerConsole.Services
                         if (_contactService.OpenSaveFolder()) {
                             Console.WriteLine("Opening folder...");
                         } else {
-                            Console.WriteLine("Save file directory has not been created yet, add a contact!");
+                            Console.WriteLine("Save file directory not found, try adding a contact");
                         }
 
                         AnyKeyToContinue();
@@ -97,7 +97,11 @@ namespace ContactManagerConsole.Services
             DisplayContact(tContact);
 
             if (_yesStrings.Contains(RequestInput("OK? (y/n): ", true, true))) {
-                _contactService.AddContact(tContact);
+                if (_contactService.AddContact(tContact))
+                    if (_contactService.SaveContactsToFile()) {
+                        Console.WriteLine("\nSuccessfully added contact");
+                        AnyKeyToContinue();
+                    }
             }
         }
 
@@ -118,8 +122,10 @@ namespace ContactManagerConsole.Services
 
                 if (_yesStrings.Contains(RequestInput("OK to remove? (y/n): ", true, true))) {
                     if (_contactService.RemoveContact(foundContacts[0])) {
-                        Console.WriteLine("Successfully removed contact");
-                        AnyKeyToContinue();
+                        if (_contactService.SaveContactsToFile()) {
+                            Console.WriteLine("\nSuccessfully removed contact");
+                            AnyKeyToContinue();
+                        }
                     } else {
                         Console.WriteLine("Failed to remove contact");
                     }
@@ -153,7 +159,11 @@ namespace ContactManagerConsole.Services
                 DisplayContact(foundContacts[result - 1]);
 
                 if (_yesStrings.Contains(RequestInput("OK to remove? (y/n): ", true, true))) {
-                    _contactService.RemoveContact(foundContacts[result - 1].Id);
+                    if (_contactService.RemoveContact(foundContacts[result - 1].Id))
+                        if (_contactService.SaveContactsToFile()) {
+                            Console.WriteLine("\nSuccessfully removed contact");
+                            AnyKeyToContinue();
+                        }
                 }
 
             } else {
@@ -209,7 +219,7 @@ namespace ContactManagerConsole.Services
             try {
                 int i = 1;
                 foreach (var c in _contactService.GetContactList()) {
-                    Console.WriteLine($"{i,2}: {c.FullName} ({c.Email})");
+                    Console.WriteLine($"{i,3}: {c.FullName} ({c.Email})");
                     i++;
                 }
             }
@@ -260,7 +270,7 @@ namespace ContactManagerConsole.Services
         /// <returns>User's input, or empty string if no input given</returns>
         private static string RequestInput(string displayText, bool required = false, bool lowercase = false) {
             Console.Write(displayText);
-            string? tInput;
+            string tInput;
 
             while (string.IsNullOrWhiteSpace(tInput = Console.ReadLine()!.Trim())) {
                 if (!required) return "";
