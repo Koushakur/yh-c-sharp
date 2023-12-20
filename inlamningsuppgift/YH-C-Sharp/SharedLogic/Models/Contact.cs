@@ -1,4 +1,6 @@
-﻿namespace SharedLogic.Models
+﻿using Newtonsoft.Json;
+
+namespace SharedLogic.Models
 {
     public class Contact
     {
@@ -15,9 +17,11 @@
         public Guid Id { get; set; } = Guid.NewGuid();
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
-        public string FullName => (string.IsNullOrEmpty(LastName) ? $"{FirstName}" : $"{FirstName} {LastName}");
         public string Email { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
         public Address Address { get; set; } = null!;
+
+        [JsonIgnore]
+        public string FullName => (string.IsNullOrEmpty(LastName) ? $"{FirstName}" : $"{FirstName} {LastName}");
     }
 }
