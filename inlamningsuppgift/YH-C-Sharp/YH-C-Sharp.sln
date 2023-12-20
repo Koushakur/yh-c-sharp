@@ -12,11 +12,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedLogic", "SharedLogic\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xUnitTests", "xUnitTests\xUnitTests.csproj", "{088AD80A-52A7-49F8-A682-4E450F98D3BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManagerAvalonia", "ContactManagerAvalonia\ContactManagerAvalonia.csproj", "{4FBE77BF-84D1-4A9A-93F3-D31B6963582E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManagerAvalonia", "ContactManagerAvalonia\ContactManagerAvalonia.csproj", "{F10BE167-3999-4A13-AF06-6EE3F4D996DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManagerAvalonia.Android", "ContactManagerAvalonia.Android\ContactManagerAvalonia.Android.csproj", "{F1C8C2AB-A795-43DD-81EE-78970EEA54EC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManagerAvalonia.Desktop", "ContactManagerAvalonia.Desktop\ContactManagerAvalonia.Desktop.csproj", "{6810CBA8-C239-417B-8EEF-216D8CFABA50}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContactManagerAvalonia.Desktop", "ContactManagerAvalonia.Desktop\ContactManagerAvalonia.Desktop.csproj", "{D4F56914-8080-41B2-923C-6D8C1FF7824B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,20 +34,14 @@ Global
 		{088AD80A-52A7-49F8-A682-4E450F98D3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{088AD80A-52A7-49F8-A682-4E450F98D3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{088AD80A-52A7-49F8-A682-4E450F98D3BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4FBE77BF-84D1-4A9A-93F3-D31B6963582E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4FBE77BF-84D1-4A9A-93F3-D31B6963582E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4FBE77BF-84D1-4A9A-93F3-D31B6963582E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4FBE77BF-84D1-4A9A-93F3-D31B6963582E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1C8C2AB-A795-43DD-81EE-78970EEA54EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1C8C2AB-A795-43DD-81EE-78970EEA54EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1C8C2AB-A795-43DD-81EE-78970EEA54EC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{F1C8C2AB-A795-43DD-81EE-78970EEA54EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1C8C2AB-A795-43DD-81EE-78970EEA54EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1C8C2AB-A795-43DD-81EE-78970EEA54EC}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{6810CBA8-C239-417B-8EEF-216D8CFABA50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6810CBA8-C239-417B-8EEF-216D8CFABA50}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6810CBA8-C239-417B-8EEF-216D8CFABA50}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6810CBA8-C239-417B-8EEF-216D8CFABA50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F10BE167-3999-4A13-AF06-6EE3F4D996DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F10BE167-3999-4A13-AF06-6EE3F4D996DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F10BE167-3999-4A13-AF06-6EE3F4D996DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F10BE167-3999-4A13-AF06-6EE3F4D996DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4F56914-8080-41B2-923C-6D8C1FF7824B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4F56914-8080-41B2-923C-6D8C1FF7824B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4F56914-8080-41B2-923C-6D8C1FF7824B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4F56914-8080-41B2-923C-6D8C1FF7824B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
