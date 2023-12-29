@@ -2,10 +2,8 @@
 using SharedLogic.Models;
 using System.Diagnostics;
 
-namespace SharedLogic.Services
-{
-    public class ContactService
-    {
+namespace SharedLogic.Services {
+    public class ContactService {
         private List<Contact> _contactList = [];
         private readonly string _saveLocation = @".\save\contacts.json";
 
@@ -23,8 +21,7 @@ namespace SharedLogic.Services
             try {
                 _contactList.Add(contact);
                 return true;
-            }
-            catch (Exception e) { Debug.WriteLine(e); }
+            } catch (Exception e) { Debug.WriteLine(e); }
             return false;
         }
 
@@ -35,12 +32,11 @@ namespace SharedLogic.Services
         /// <returns>True if contact was successully removed, otherwise false</returns>
         public bool RemoveContact(string email) {
             try {
-                Contact foundContact = _contactList.Find(x => x.Email == email)!;
+                Contact foundContact = FindContactByEmail(email);
                 if (foundContact != null) {
                     return _contactList.Remove(foundContact);
                 }
-            }
-            catch (Exception e) { Debug.WriteLine(e); }
+            } catch (Exception e) { Debug.WriteLine(e); }
             return false;
         }
 
@@ -52,8 +48,7 @@ namespace SharedLogic.Services
         public bool RemoveContact(Contact contact) {
             try {
                 return _contactList.Remove(contact);
-            }
-            catch (Exception e) { Debug.WriteLine(e); }
+            } catch (Exception e) { Debug.WriteLine(e); }
             return false;
         }
 
@@ -65,17 +60,26 @@ namespace SharedLogic.Services
         public bool RemoveContact(Guid contactId) {
             try {
                 return _contactList.Remove(_contactList.Find(x => x.Id == contactId)!);
-            }
-            catch (Exception e) { Debug.WriteLine(e); }
+            } catch (Exception e) { Debug.WriteLine(e); }
             return false;
         }
 
         /// <summary>
-        /// Not implemented
+        /// Updates a contact with the information stored in updatedContact
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
-        public void UpdateContact() {
-            throw new NotImplementedException("Can't update contacts yet");
+        /// <param name="email">E-mail of contact to update</param>
+        /// <param name="updatedContact">Contact object storing the updated information</param>
+        public void UpdateContact(string email, Contact updatedContact) {
+            Contact foundContact = FindContactByEmail(email);
+            if (foundContact != null) {
+
+                foundContact.FirstName = updatedContact.FirstName;
+                foundContact.LastName = updatedContact.LastName;
+                foundContact.Email = updatedContact.Email;
+                foundContact.PhoneNumber = updatedContact.PhoneNumber;
+
+                foundContact.Address = updatedContact.Address;
+            }
         }
 
         /// <summary>
@@ -90,6 +94,15 @@ namespace SharedLogic.Services
         /// </summary>
         public int GetContactCount() {
             return _contactList.Count;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>Contact if found, otherwise null</returns>
+        public Contact FindContactByEmail(string email) {
+            return _contactList.Find(x => x.Email == email)!;
         }
 
         /// <summary>
@@ -108,8 +121,7 @@ namespace SharedLogic.Services
                 if (!string.IsNullOrEmpty(readContent)) {
                     _contactList = JsonConvert.DeserializeObject<List<Contact>>(readContent)!;
                 } else return false;
-            }
-            catch (Exception e) { Debug.WriteLine(e); return false; }
+            } catch (Exception e) { Debug.WriteLine(e); return false; }
             return true;
         }
 
