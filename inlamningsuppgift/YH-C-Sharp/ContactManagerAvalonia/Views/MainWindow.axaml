@@ -3,7 +3,6 @@
         xmlns:vm="clr-namespace:ContactManagerAvalonia.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:views="clr-namespace:ContactManagerAvalonia.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ContactManagerAvalonia.Views.MainWindow"
         
@@ -17,10 +16,12 @@
       <vm:MainWindowViewModel/>
    </Design.DataContext>
 
-   <Grid>
-
-      <ContentControl Content="{Binding ContentViewModel}"/>
-   </Grid>
-   <!--<views:MainView />-->
+   <Panel>
+      <TransitioningContentControl Content="{Binding CurrentViewModel}">
+         <TransitioningContentControl.PageTransition>
+            <PageSlide Orientation="Vertical" Duration="00.200" SlideOutEasing="ExponentialEaseInOut"/>
+         </TransitioningContentControl.PageTransition>
+      </TransitioningContentControl>
+   </Panel>
 
 </Window>

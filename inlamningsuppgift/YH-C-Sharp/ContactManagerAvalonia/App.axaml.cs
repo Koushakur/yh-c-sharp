@@ -19,9 +19,9 @@ public partial class App : Application {
            .ConfigureServices(services => {
                services.AddSingleton<ContactService>();
                services.AddSingleton<MainViewModel>();
-               services.AddSingleton<MainView>();
                services.AddSingleton<MainWindow>();
                services.AddSingleton<MainWindowViewModel>();
+               services.AddTransient<AddContactViewModel>();
            }).Build();
     }
 

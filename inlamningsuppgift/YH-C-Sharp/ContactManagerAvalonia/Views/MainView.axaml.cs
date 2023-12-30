@@ -6,7 +6,11 @@ using System;
 namespace ContactManagerAvalonia.Views;
 
 public partial class MainView : UserControl {
-    public MainView() { }
+
+    public MainView() {
+        InitializeComponent();
+    }
+
     public MainView(IServiceProvider sp) {
         InitializeComponent();
         DataContext = sp.GetRequiredService<MainViewModel>();

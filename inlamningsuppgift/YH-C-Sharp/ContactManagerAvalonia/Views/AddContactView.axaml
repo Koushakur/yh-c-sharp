@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:ContactManagerAvalonia.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ContactManagerAvalonia.Views.AddContactView"
+             x:DataType="vm:AddContactViewModel">
+
+   <Design.DataContext>
+      <vm:AddContactViewModel/>
+   </Design.DataContext>
+
+   <Panel Grid.Column="3" Margin="10, 5">
+      <Panel.Styles>
+         <Style Selector="TextBox">
+            <Setter Property="Margin" Value="0, 0, 0, 10"/>
+         </Style>
+      </Panel.Styles>
+
+      <StackPanel MinWidth="100">
+         <Label Content="~: New contact :~" Margin="0, 5, 0, 8" HorizontalAlignment="Center"/>
+         <Grid ColumnDefinitions="*,*">
+            <StackPanel Grid.Column="0">
+               <Label Content="First name*"/>
+               <TextBox Text="{Binding InputFirstName, Mode=TwoWay}" Margin="0, 0, 5, 0 "/>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+               <Label Content="Last name"/>
+               <TextBox Text="{Binding InputLastName, Mode=TwoWay}"/>
+            </StackPanel>
+         </Grid>
+
+         <Grid ColumnDefinitions="*,*">
+            <StackPanel>
+               <Label Content="E-mail*"/>
+               <TextBox Text="{Binding InputEmail, Mode=TwoWay}" Margin="0, 0, 5, 0 "/>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+               <Label Content="Phone number"/>
+               <TextBox Text="{Binding InputPhoneNumber, Mode=TwoWay}"/>
+            </StackPanel>
+         </Grid>
+
+         <!-- Address entry -->
+         <Grid ColumnDefinitions="*,*">
+            <StackPanel>
+               <Label Content="Street"/>
+               <TextBox Text="{Binding InputStreet, Mode=TwoWay}" Margin="0, 0, 5, 0 "/>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+               <Label Content="City"/>
+               <TextBox Text="{Binding InputCity, Mode=TwoWay}"/>
+            </StackPanel>
+         </Grid>
+
+         <Grid ColumnDefinitions="*,*">
+            <StackPanel>
+               <Label Content="Postal Code"/>
+               <TextBox Text="{Binding InputPostalCode, Mode=TwoWay}" Margin="0, 0, 5, 0 "/>
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+               <Label Content="Country"/>
+               <TextBox Text="{Binding InputCountry, Mode=TwoWay}"/>
+            </StackPanel>
+         </Grid>
+
+         <WrapPanel Margin="0, 10" HorizontalAlignment="Center">
+            <Button Content="Add Contact" Command="{Binding AddContact}"/>
+            <Button Content="Cancel" Command="{Binding SetViewMain}" Margin="15, 0"/>
+         </WrapPanel>
+      </StackPanel>
+   </Panel>
+
+</UserControl>

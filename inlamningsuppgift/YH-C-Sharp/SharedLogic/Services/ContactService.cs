@@ -70,17 +70,27 @@ namespace SharedLogic.Services {
         /// </summary>
         /// <param name="email">E-mail of contact to update</param>
         /// <param name="updatedContact">Contact object storing the updated information</param>
-        public void UpdateContact(string email, Contact updatedContact) {
-            Contact foundContact = FindContactByEmail(email);
-            if (foundContact != null) {
+        /// <returns>True if successfully updated the contact, otherwise false</returns>
+        public bool UpdateContact(string email, Contact updatedContact) {
+            try {
+                Contact foundContact = FindContactByEmail(email);
 
-                foundContact.FirstName = updatedContact.FirstName;
-                foundContact.LastName = updatedContact.LastName;
-                foundContact.Email = updatedContact.Email;
-                foundContact.PhoneNumber = updatedContact.PhoneNumber;
+                if (foundContact == null)
+                    return false;
 
-                foundContact.Address = updatedContact.Address;
-            }
+                if (foundContact != null) {
+
+                    foundContact.FirstName = updatedContact.FirstName;
+                    foundContact.LastName = updatedContact.LastName;
+                    foundContact.Email = updatedContact.Email;
+                    foundContact.PhoneNumber = updatedContact.PhoneNumber;
+
+                    foundContact.Address = updatedContact.Address;
+                }
+
+            } catch (Exception e) { Debug.WriteLine(e); return false; }
+
+            return true;
         }
 
         /// <summary>

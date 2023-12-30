@@ -6,10 +6,13 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using System.Diagnostics;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualBasic;
 
 namespace ContactManagerAvalonia.ViewModels;
 
 public partial class MainViewModel : ViewModelBase {
+
     private readonly ContactService? _contactService;
     private readonly IServiceProvider? _sp;
 
@@ -20,30 +23,28 @@ public partial class MainViewModel : ViewModelBase {
         RefreshList();
     }
 
-    #region Observables
+    #region Observable properties
 
     [ObservableProperty]
     private List<Contact>? _contactListbox = [];
 
     [ObservableProperty]
-    private string _obsTest = "";
-    [ObservableProperty]
-    private string _inputFirstName = "";
-    [ObservableProperty]
-    private string _inputLastName = "";
-    [ObservableProperty]
-    private string _inputEmail = "";
-    [ObservableProperty]
-    private string _inputPhoneNumber = "";
-    [ObservableProperty]
-    private Address _inputAddress = new();
-
+    private int _viewPaneWidth = 400;
     [ObservableProperty]
     private string _viewFullName = "";
     [ObservableProperty]
     private string _viewEmail = "";
     [ObservableProperty]
     private string _viewPhoneNumber = "";
+    [ObservableProperty]
+    private string _viewStreet = "";
+    [ObservableProperty]
+    private string _viewCity = "";
+    [ObservableProperty]
+    private string _viewPostalCode = "";
+    [ObservableProperty]
+    private string _viewCountry = "";
+    private List<string> _viewProps = [];
 
     [ObservableProperty]
     private string _updateFirstName = "";
@@ -53,9 +54,15 @@ public partial class MainViewModel : ViewModelBase {
     private string _updateEmail = "";
     [ObservableProperty]
     private string _updatePhoneNumber = "";
-
     [ObservableProperty]
-    private bool _paneOutAdd = false;
+    private string _updateStreet = "";
+    [ObservableProperty]
+    private string _updateCity = "";
+    [ObservableProperty]
+    private string _updatePostalCode = "";
+    [ObservableProperty]
+    private string _updateCountry = "";
+
     [ObservableProperty]
     private bool _paneOutView = false;
     [ObservableProperty]
@@ -72,41 +79,26 @@ public partial class MainViewModel : ViewModelBase {
 
     #region RelayCommands
 
+    /// <summary>
+    /// Opens folder containing the contacts json
+    /// </summary>
     [RelayCommand]
     public void OpenFolder() {
         _contactService!.OpenSaveFolder();
     }
 
+    /// <summary>
+    /// Changes the view to 'Add contact'
+    /// </summary>
     [RelayCommand]
-    public void TogglePaneAdd() {
+    public void SetViewAddContact() {
         HideAllPanes();
-        PaneOutAdd = true;
+        _sp!.GetRequiredService<MainWindowViewModel>().SetViewAddContact();
     }
 
-    [RelayCommand]
-    public void AddContact() {
-        try {
-            var c = new Contact {
-                FirstName = InputFirstName,
-                LastName = InputLastName,
-                Email = InputEmail,
-                PhoneNumber = InputPhoneNumber,
-            };
-
-            _contactService!.AddContact(c);
-            _contactService?.SaveContactsToFile();
-            RefreshList();
-
-            InputFirstName = string.Empty;
-            InputLastName = string.Empty;
-            InputEmail = string.Empty;
-            InputPhoneNumber = string.Empty;
-
-        } catch (Exception e) {
-            Debug.WriteLine(e);
-        }
-    }
-
+    /// <summary>
+    /// Expands 'View' pane and displays all information of selected contact
+    /// </summary>
     [RelayCommand]
     public void ViewContact() {
         try {
@@ -117,19 +109,31 @@ public partial class MainViewModel : ViewModelBase {
             PaneOutView = true;
 
             var c = SelectedContact as Contact;
-            ViewFullName = c.FullName;
+
+            ViewFullName = c!.FullName;
             ViewEmail = c.Email;
             ViewPhoneNumber = c.PhoneNumber;
             if (c.Address != null) {
-
+                ViewStreet = c.Address.Street;
+                ViewCity = c.Address.City;
+                ViewPostalCode = c.Address.PostalCode + " ";
+                ViewCountry = c.Address.Country;
             }
-        } catch (Exception e) {
-            Debug.WriteLine(e);
-        }
+
+            //Expand width of splitview pane if needed due to long entries
+            _viewProps = [ViewFullName, ViewEmail, ViewPhoneNumber, ViewStreet, ViewCity, ViewPostalCode + ViewCountry];
+            string longestEntry = _viewProps.OrderByDescending(s => s.Length).First();
+            ViewPaneWidth = (int)Math.Floor(Math.Max(longestEntry.Length * 12.5, 320));
+
+        } catch (Exception e) { Debug.WriteLine(e); }
     }
 
+    /// <summary>
+    /// Opens the pane for updating a contact<br/>
+    /// Populates all relevant TextBlocks and hides all other panes
+    /// </summary>
     [RelayCommand]
-    public void TogglePaneUpdate() {
+    public void OpenPaneUpdate() {
         try {
             if (SelectedContact == null)
                 return;
@@ -137,48 +141,71 @@ public partial class MainViewModel : ViewModelBase {
             HideAllPanes();
             PaneOutUpdate = true;
 
-            var tContact = SelectedContact as Contact;
+            var c = SelectedContact as Contact;
 
-            UpdateFirstName = tContact.FirstName;
-            UpdateLastName = tContact.LastName;
-            UpdateEmail = tContact.Email;
-            UpdatePhoneNumber = tContact.PhoneNumber;
+            UpdateFirstName = c!.FirstName;
+            UpdateLastName = c.LastName;
+            UpdateEmail = c.Email;
+            UpdatePhoneNumber = c.PhoneNumber;
+            UpdateStreet = c.Address.Street;
+            UpdateCity = c.Address.City;
+            UpdatePostalCode = c.Address.PostalCode;
+            UpdateCountry = c.Address.Country;
 
-        } catch (Exception e) {
-            Debug.WriteLine(e);
-        }
+        } catch (Exception e) { Debug.WriteLine(e); }
     }
 
+    /// <summary>
+    /// Updates selected contact with information from update pane
+    /// </summary>
     [RelayCommand]
     public void UpdateContact() {
 
         try {
+            if (string.IsNullOrWhiteSpace(UpdateFirstName)
+                || string.IsNullOrWhiteSpace(UpdateEmail))
+                return;
 
             var c = SelectedContact as Contact;
 
             var updatedContact = new Contact {
-                FirstName = UpdateFirstName,
-                LastName = UpdateLastName,
-                Email = UpdateEmail,
-                PhoneNumber = UpdatePhoneNumber,
+                FirstName = UpdateFirstName.Trim(),
+                LastName = UpdateLastName.Trim(),
+                Email = UpdateEmail.Trim(),
+                PhoneNumber = UpdatePhoneNumber.Trim(),
+
+                Address = new Address {
+                    Street = UpdateStreet.Trim(),
+                    City = UpdateCity.Trim(),
+                    PostalCode = UpdatePostalCode.Trim(),
+                    Country = UpdateCountry.Trim()
+                }
             };
+
             _contactService!.UpdateContact(c!.Email, updatedContact);
             _contactService.SaveContactsToFile();
             RefreshList();
+            HideAllPanes();
 
-        } catch (Exception e) {
-            Debug.WriteLine(e);
-        }
+        } catch (Exception e) { Debug.WriteLine(e); }
     }
 
+    /// <summary>
+    /// Toggles pop-up to confirm removal of selected contact
+    /// </summary>
     [RelayCommand]
     public void ToggleRemovalConfirmation() {
         if (SelectedContact == null)
             return;
 
-        PaneOutRemove = true;
+        HideAllPanes();
+        CheckboxConfirmRemove = false;
+        PaneOutRemove = !PaneOutRemove;
     }
 
+    /// <summary>
+    /// Removes selected contact from contactlist
+    /// </summary>
     [RelayCommand]
     public void RemoveContact() {
         try {
@@ -188,16 +215,13 @@ public partial class MainViewModel : ViewModelBase {
             var c = SelectedContact as Contact;
             if (_contactService!.RemoveContact(c!.Email)) {
                 _contactService.SaveContactsToFile();
+                RefreshList();
 
                 CheckboxConfirmRemove = false;
                 PaneOutRemove = false;
-
-                RefreshList();
             }
 
-        } catch (Exception e) {
-            Debug.WriteLine(e);
-        }
+        } catch (Exception e) { Debug.WriteLine(e); }
     }
 
     #endregion
@@ -209,10 +233,29 @@ public partial class MainViewModel : ViewModelBase {
         ContactListbox = _contactService!.GetContactList().ToList();
     }
 
+    /// <summary>
+    /// Hides View, Update and Remove panes/pop-ups
+    /// </summary>
     private void HideAllPanes() {
-        PaneOutAdd = false;
         PaneOutView = false;
         PaneOutUpdate = false;
         PaneOutRemove = false;
+    }
+
+    /// <summary>
+    /// Adds a contact to the contactlist
+    /// </summary>
+    /// <param name="contact">Contact object to add</param>
+    public void AddContact(Contact contact) {
+        try {
+
+            if (_contactService!.AddContact(contact)) {
+                _contactService?.SaveContactsToFile();
+                RefreshList();
+            }
+
+        } catch (Exception e) {
+            Debug.WriteLine(e);
+        }
     }
 }
