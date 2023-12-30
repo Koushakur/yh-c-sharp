@@ -9,7 +9,8 @@ namespace SharedLogic.Services {
 
         public ContactService() {
             if (!ReadContactsFromFile()) {
-                Debug.WriteLine("Failed to read contacts file");
+                // Failed to load contacts, save empty json. Mostly to create directory
+                SaveContactsToFile();
             }
         }
 
@@ -120,7 +121,9 @@ namespace SharedLogic.Services {
                 var readContent = FileService.ReadFromFile(_saveLocation);
                 if (!string.IsNullOrEmpty(readContent)) {
                     _contactList = JsonConvert.DeserializeObject<List<Contact>>(readContent)!;
+
                 } else return false;
+
             } catch (Exception e) { Debug.WriteLine(e); return false; }
             return true;
         }

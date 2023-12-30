@@ -5,11 +5,12 @@ using System;
 
 namespace ContactManagerAvalonia.Views;
 
-public partial class MainWindow : Window
-{
+public partial class MainWindow : Window {
+
     public MainWindow() { }
     public MainWindow(IServiceProvider sp) {
         InitializeComponent();
-        DataContext = sp.GetRequiredService<MainViewModel>();
+        //DataContext = sp.GetRequiredService<MainViewModel>();
+        DataContext = sp.GetRequiredService<MainWindowViewModel>();
     }
 }

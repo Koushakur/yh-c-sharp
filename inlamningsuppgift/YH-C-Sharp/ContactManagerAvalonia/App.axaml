@@ -1,15 +1,20 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ContactManagerAvalonia.App"
+             xmlns:local="using:ContactManagerAvalonia"
              RequestedThemeVariant="Dark">
-  <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+   <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-  <Application.Styles>
-    <FluentTheme>
-      <FluentTheme.Palettes>
-        <ColorPaletteResources x:Key="Light" Accent="#ff0073cf" AltMediumLow="#D0D0DA" RegionColor="#f0f0ff" />
-        <ColorPaletteResources x:Key="Dark" Accent="#ff0073cf" AltMediumLow="#30303A" RegionColor="#202025" />
-      </FluentTheme.Palettes>
-    </FluentTheme>
-  </Application.Styles>
+   <Application.DataTemplates>
+      <local:ViewLocator/>
+   </Application.DataTemplates>
+
+   <Application.Styles>
+      <FluentTheme>
+         <FluentTheme.Palettes>
+            <ColorPaletteResources x:Key="Light" Accent="#ff0073cf" AltMediumLow="#D0D0DA" RegionColor="#f0f0ff" />
+            <ColorPaletteResources x:Key="Dark" Accent="#ff0073cf" AltMediumLow="#30303A" RegionColor="#202025" />
+         </FluentTheme.Palettes>
+      </FluentTheme>
+   </Application.Styles>
 </Application>

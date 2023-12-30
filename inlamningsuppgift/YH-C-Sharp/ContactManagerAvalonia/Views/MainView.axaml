@@ -6,159 +6,156 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ContactManagerAvalonia.Views.MainView"
              x:DataType="vm:MainViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
+
+   <Design.DataContext>
+      <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
-  </Design.DataContext>
+      <vm:MainViewModel />
+   </Design.DataContext>
 
-  <Grid ColumnDefinitions="150,*">
-    <Grid.Styles>
-      <Style Selector="Button, ToggleButton">
-        <Setter Property="Margin" Value="0, 5"/>
-        <Setter Property="Padding" Value="0, 5"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-      </Style>
-    </Grid.Styles>
+   <Grid ColumnDefinitions="150,*">
+      <Grid.Styles>
+         <Style Selector="Button, ToggleButton">
+            <Setter Property="Margin" Value="0, 5"/>
+            <Setter Property="Padding" Value="0, 5"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+         </Style>
+      </Grid.Styles>
 
-    <Panel Grid.Column="0" Background="{DynamicResource TextControlBackground}">
-      <StackPanel Margin="10">
-        <Button Content="Add new" Command="{Binding TogglePaneAdd}"/>
-        <Button Content="View selected" Command="{Binding ViewContact}"/>
-        <Button Content="Update selected" Command="{Binding TogglePaneUpdate}"/>
-        <Button Content="Remove selected" Command="{Binding RemovalConfirmation}"/>
-        <!--<Button Content="Remove selected" Command="{Binding RemoveContact}"/>-->
-        <Button Content="Open Folder" Command="{Binding OpenFolder}"/>
+      <!-- Buttons -->
+      <Panel Grid.Column="0" Background="{DynamicResource TextControlBackground}">
+         <StackPanel Margin="10">
+            <Button Content="Add new" Command="{Binding TogglePaneAdd}"/>
+            <Button Content="View selected" Command="{Binding ViewContact}"/>
+            <Button Content="Update selected" Command="{Binding TogglePaneUpdate}"/>
+            <Button Content="Remove selected" Command="{Binding ToggleRemovalConfirmation}"/>
+            <Button Content="Open Folder" Command="{Binding OpenFolder}"/>
+         </StackPanel>
+      </Panel>
 
-      </StackPanel>
-    </Panel>
+      <!-- Right-hand side of window -->
+      <Panel Grid.Column="1">
+         <Popup IsOpen="{Binding PaneOutRemove,Mode=TwoWay}"
+            PlacementMode="Center"
+            IsLightDismissEnabled="True"
+            >
 
-    <Panel Grid.Column="1">
-      <Popup IsOpen="{Binding PaneOutRemove}"
-             Placement="Top"
-             PlacementAnchor="Top"
-             PlacementMode="Center"
-             IsLightDismissEnabled="True"
-             PlacementGravity="Right"
-             >
+            <Border Background="{DynamicResource TextControlBackground}" CornerRadius="10" BorderBrush="Gray" BorderThickness="1">
 
-        <Border Background="{DynamicResource TextControlBackground}" CornerRadius="10" BorderBrush="Gray" BorderThickness="1">
+               <StackPanel Margin="15">
+                  <WrapPanel Margin="0, 0, 0, 10">
+                     <Label Content="Are you sure you want to remove selected contact?" Margin="0, 3, 0, 0"/>
+                     <CheckBox IsChecked="{Binding CheckboxConfirmRemove}" Margin="8, 0, 0, 0"/>
+                  </WrapPanel>
+                  <Button Content="Remove contact" IsEnabled="{Binding CheckboxConfirmRemove}" Command="{Binding RemoveContact}"/>
+               </StackPanel>
+            </Border>
 
-          <StackPanel Margin="10">
+         </Popup>
 
-            <WrapPanel>
-              <Label Content="Are you sure you want to remove selected contact?"/>
-              <CheckBox IsChecked="{Binding CheckboxConfirmRemove}"/>
-            </WrapPanel>
-            <Button Content="Popup test" IsEnabled="{Binding CheckboxConfirmRemove}"/>
-          </StackPanel>
-        </Border>
-
-      </Popup>
-
-      <SplitView IsPaneOpen="{Binding PaneOutUpdate,Mode=TwoWay}"  PanePlacement="Right">
-        <!-- Pane for updating contact -->
-        <SplitView.Pane>
-          <StackPanel Margin="10">
-            <Label Content="First Name"/>
-            <TextBox Text="{Binding UpdateFirstName,Mode=TwoWay}"/>
-            <Label Content="Last Name"/>
-            <TextBox Text="{Binding UpdateLastName,Mode=TwoWay}"/>
-            <Label Content="E-mail"/>
-            <TextBox Text="{Binding UpdateEmail,Mode=TwoWay}"/>
-            <Label Content="Phone Number"/>
-            <TextBox Text="{Binding UpdatePhoneNumber,Mode=TwoWay}"/>
-            <Button Content="Update Contact" Command="{Binding UpdateContact}"/>
-          </StackPanel>
-        </SplitView.Pane>
-
-        <!--<SplitView IsPaneOpen="True"  PanePlacement="Right">-->
-        <SplitView IsPaneOpen="{Binding PaneOutView,Mode=TwoWay}"  PanePlacement="Right">
-          <!-- Pane for viewing detailed info on contact -->
-          <!--TODO: Better presentation-->
-
-          <SplitView.Pane>
-
-            <StackPanel Margin="10">
-              <StackPanel.Styles>
-                <Style Selector="TextBlock">
-                  <Setter Property="FontSize" Value="20"/>
-                </Style>
-              </StackPanel.Styles>
-
-              <TextBlock Text="{Binding ViewFullName,Mode=TwoWay}"/>
-              <TextBlock Text="{Binding ViewEmail,Mode=TwoWay}"/>
-              <TextBlock Text="{Binding ViewPhoneNumber,Mode=TwoWay}"/>
-            </StackPanel>
-          </SplitView.Pane>
-
-          <SplitView IsPaneOpen="{Binding PaneOutAdd,Mode=TwoWay}" PanePlacement="Right">
-            <!-- Pane for adding a new contact -->
+         <SplitView IsPaneOpen="{Binding PaneOutUpdate,Mode=TwoWay}"  PanePlacement="Right">
+            <!-- Pane for updating contact -->
             <SplitView.Pane>
-              <Panel Grid.Column="3" Margin="10, 5">
-                <Panel.Styles>
-                  <Style Selector="TextBox">
-                    <Setter Property="Margin" Value="0, 0, 0, 10"/>
-                  </Style>
-                </Panel.Styles>
-                <StackPanel MinWidth="100">
-                  <Label Content="New contact:" Margin="0, 5, 0, 8"/>
-                  <Grid ColumnDefinitions="*,*">
-                    <StackPanel Grid.Column="0">
-                      <Label Content="First name*"/>
-                      <TextBox Text="{Binding InputFirstName, Mode=TwoWay}" Margin="0, 0, 5, 0 "/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1">
-                      <Label Content="Last name"/>
-                      <TextBox Text="{Binding InputLastName, Mode=TwoWay}"/>
-                    </StackPanel>
-                  </Grid>
-
-                  <Grid ColumnDefinitions="*,*">
-                    <StackPanel>
-                      <Label Content="E-mail*"/>
-                      <TextBox Text="{Binding InputEmail, Mode=TwoWay}" Margin="0, 0, 5, 0 "/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="1">
-                      <Label Content="Phone number"/>
-                      <TextBox Text="{Binding InputPhoneNumber, Mode=TwoWay}"/>
-                    </StackPanel>
-                  </Grid>
-
-                  <Button Content="Add Contact" Command="{Binding AddContact}"/>
-                </StackPanel>
-              </Panel>
+               <StackPanel Margin="10">
+                  <Label Content="First Name"/>
+                  <TextBox Text="{Binding UpdateFirstName,Mode=TwoWay}"/>
+                  <Label Content="Last Name"/>
+                  <TextBox Text="{Binding UpdateLastName,Mode=TwoWay}"/>
+                  <Label Content="E-mail"/>
+                  <TextBox Text="{Binding UpdateEmail,Mode=TwoWay}"/>
+                  <Label Content="Phone Number"/>
+                  <TextBox Text="{Binding UpdatePhoneNumber,Mode=TwoWay}"/>
+                  <Button Content="Update Contact" Command="{Binding UpdateContact}"/>
+               </StackPanel>
             </SplitView.Pane>
 
-            <!--List of all contacts-->
-            <ListBox ItemsSource="{Binding ContactListbox}" SelectedItem="{Binding SelectedContact}">
+            <!--<SplitView IsPaneOpen="True"  PanePlacement="Right">-->
+            <SplitView IsPaneOpen="{Binding PaneOutView,Mode=TwoWay}"  PanePlacement="Right">
+               <!-- Pane for viewing detailed info on contact -->
+               <!--TODO: Better presentation-->
 
-              <ListBox.Styles>
-                <Style Selector="ListBox">
-                  <Setter Property="Padding" Value="10"/>
-                </Style>
-                <Style Selector="ListBoxItem">
-                  <Setter Property="Padding" Value="4"/>
-                  <Setter Property="Margin" Value="0"/>
-                </Style>
-              </ListBox.Styles>
+               <SplitView.Pane>
 
-              <ListBox.ItemTemplate>
-                <DataTemplate>
-                  <WrapPanel>
-                    <TextBlock Text="{Binding FullName}" Margin="0, 0, 12, 0" />
-                    <TextBlock Text="{Binding Email,StringFormat='({0})'}" />
-                  </WrapPanel>
-                </DataTemplate>
-              </ListBox.ItemTemplate>
+                  <StackPanel Margin="10">
+                     <StackPanel.Styles>
+                        <Style Selector="TextBlock">
+                           <Setter Property="FontSize" Value="20"/>
+                        </Style>
+                     </StackPanel.Styles>
 
-            </ListBox>
-          </SplitView>
-        </SplitView>
-      </SplitView>
+                     <TextBlock Text="{Binding ViewFullName,Mode=TwoWay}"/>
+                     <TextBlock Text="{Binding ViewEmail,Mode=TwoWay}"/>
+                     <TextBlock Text="{Binding ViewPhoneNumber,Mode=TwoWay}"/>
+                  </StackPanel>
+               </SplitView.Pane>
 
-    </Panel>
+               <SplitView IsPaneOpen="{Binding PaneOutAdd,Mode=TwoWay}" PanePlacement="Right">
+                  <!-- Pane for adding a new contact -->
+                  <SplitView.Pane>
+                     <Panel Grid.Column="3" Margin="10, 5">
+                        <Panel.Styles>
+                           <Style Selector="TextBox">
+                              <Setter Property="Margin" Value="0, 0, 0, 10"/>
+                           </Style>
+                        </Panel.Styles>
+                        <StackPanel MinWidth="100">
+                           <Label Content="New contact:" Margin="0, 5, 0, 8"/>
+                           <Grid ColumnDefinitions="*,*">
+                              <StackPanel Grid.Column="0">
+                                 <Label Content="First name*"/>
+                                 <TextBox Text="{Binding InputFirstName, Mode=TwoWay}" Margin="0, 0, 5, 0 "/>
+                              </StackPanel>
+                              <StackPanel Grid.Column="1">
+                                 <Label Content="Last name"/>
+                                 <TextBox Text="{Binding InputLastName, Mode=TwoWay}"/>
+                              </StackPanel>
+                           </Grid>
 
-  </Grid>
+                           <Grid ColumnDefinitions="*,*">
+                              <StackPanel>
+                                 <Label Content="E-mail*"/>
+                                 <TextBox Text="{Binding InputEmail, Mode=TwoWay}" Margin="0, 0, 5, 0 "/>
+                              </StackPanel>
+                              <StackPanel Grid.Column="1">
+                                 <Label Content="Phone number"/>
+                                 <TextBox Text="{Binding InputPhoneNumber, Mode=TwoWay}"/>
+                              </StackPanel>
+                           </Grid>
+
+                           <Button Content="Add Contact" Command="{Binding AddContact}"/>
+                        </StackPanel>
+                     </Panel>
+                  </SplitView.Pane>
+
+                  <!--List of all contacts-->
+                  <ListBox ItemsSource="{Binding ContactListbox}" SelectedItem="{Binding SelectedContact}">
+
+                     <ListBox.Styles>
+                        <Style Selector="ListBox">
+                           <Setter Property="Padding" Value="10"/>
+                        </Style>
+                        <Style Selector="ListBoxItem">
+                           <Setter Property="Padding" Value="4"/>
+                           <Setter Property="Margin" Value="0"/>
+                        </Style>
+                     </ListBox.Styles>
+
+                     <ListBox.ItemTemplate>
+                        <DataTemplate>
+                           <WrapPanel>
+                              <TextBlock Text="{Binding FullName}" Margin="0, 0, 12, 0" />
+                              <TextBlock Text="{Binding Email,StringFormat='({0})'}" />
+                           </WrapPanel>
+                        </DataTemplate>
+                     </ListBox.ItemTemplate>
+
+                  </ListBox>
+               </SplitView>
+            </SplitView>
+         </SplitView>
+
+      </Panel>
+
+   </Grid>
 </UserControl>

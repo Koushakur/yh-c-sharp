@@ -11,17 +11,17 @@ using SharedLogic.Services;
 
 namespace ContactManagerAvalonia;
 
-public partial class App : Application
-{
+public partial class App : Application {
     private static IHost? builder;
 
     public App() {
         builder = Host.CreateDefaultBuilder()
            .ConfigureServices(services => {
                services.AddSingleton<ContactService>();
+               services.AddSingleton<MainViewModel>();
                services.AddSingleton<MainView>();
                services.AddSingleton<MainWindow>();
-               services.AddSingleton<MainViewModel>();
+               services.AddSingleton<MainWindowViewModel>();
            }).Build();
     }
 
@@ -38,10 +38,7 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {
             desktop.MainWindow = builder!.Services.GetRequiredService<MainWindow>();
-            //builder!.Services.GetRequiredService<MainWindow>().Show();
-            //desktop.MainWindow = new MainWindow {
-            //    DataContext = new MainViewModel()
-            //};
+
         } else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform) {
             singleViewPlatform.MainView = builder!.Services.GetRequiredService<MainView>();
         }

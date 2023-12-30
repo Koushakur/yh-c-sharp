@@ -8,9 +8,19 @@
         x:Class="ContactManagerAvalonia.Views.MainWindow"
         
         Icon="/Assets/icon.ico"
-	      MinWidth="500" MinHeight="300"
-	      Width="1000" Height="600"
-	      Title="Contact Manager 3000">
-  <views:MainView />
+	     MinWidth="600" MinHeight="350"
+	     Width="1000" Height="600"
+	     Title="Contact Manager 3000"
+        x:DataType="vm:MainWindowViewModel">
+
+   <Design.DataContext>
+      <vm:MainWindowViewModel/>
+   </Design.DataContext>
+
+   <Grid>
+
+      <ContentControl Content="{Binding ContentViewModel}"/>
+   </Grid>
+   <!--<views:MainView />-->
 
 </Window>

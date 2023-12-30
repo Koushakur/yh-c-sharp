@@ -5,7 +5,7 @@ using SharedLogic.Services;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
 
 namespace ContactManagerAvalonia.ViewModels;
 
@@ -36,7 +36,7 @@ public partial class MainViewModel : ViewModelBase {
     [ObservableProperty]
     private string _inputPhoneNumber = "";
     [ObservableProperty]
-    private Address _inputAddress = new Address();
+    private Address _inputAddress = new();
 
     [ObservableProperty]
     private string _viewFullName = "";
@@ -85,87 +85,119 @@ public partial class MainViewModel : ViewModelBase {
 
     [RelayCommand]
     public void AddContact() {
-        var tContact = new Contact {
-            FirstName = InputFirstName,
-            LastName = InputLastName,
-            Email = InputEmail,
-            PhoneNumber = InputPhoneNumber,
-        };
+        try {
+            var c = new Contact {
+                FirstName = InputFirstName,
+                LastName = InputLastName,
+                Email = InputEmail,
+                PhoneNumber = InputPhoneNumber,
+            };
 
-        _contactService!.AddContact(tContact);
-        _contactService?.SaveContactsToFile();
-        RefreshList();
+            _contactService!.AddContact(c);
+            _contactService?.SaveContactsToFile();
+            RefreshList();
 
-        InputFirstName = string.Empty;
-        InputLastName = string.Empty;
-        InputEmail = string.Empty;
-        InputPhoneNumber = string.Empty;
+            InputFirstName = string.Empty;
+            InputLastName = string.Empty;
+            InputEmail = string.Empty;
+            InputPhoneNumber = string.Empty;
 
+        } catch (Exception e) {
+            Debug.WriteLine(e);
+        }
     }
 
     [RelayCommand]
     public void ViewContact() {
-        if (SelectedContact == null)
-            return;
+        try {
+            if (SelectedContact == null)
+                return;
 
-        HideAllPanes();
-        PaneOutView = true;
+            HideAllPanes();
+            PaneOutView = true;
 
-        var t = SelectedContact as Contact;
-        ViewFullName = t.FullName;
-        ViewEmail = t.Email;
-        ViewPhoneNumber = t.PhoneNumber;
-        if (t.Address != null) {
+            var c = SelectedContact as Contact;
+            ViewFullName = c.FullName;
+            ViewEmail = c.Email;
+            ViewPhoneNumber = c.PhoneNumber;
+            if (c.Address != null) {
 
+            }
+        } catch (Exception e) {
+            Debug.WriteLine(e);
         }
     }
 
     [RelayCommand]
     public void TogglePaneUpdate() {
-        if (SelectedContact == null)
-            return;
+        try {
+            if (SelectedContact == null)
+                return;
 
-        HideAllPanes();
-        PaneOutUpdate = true;
+            HideAllPanes();
+            PaneOutUpdate = true;
 
-        var tContact = SelectedContact as Contact;
+            var tContact = SelectedContact as Contact;
 
-        UpdateFirstName = tContact.FirstName;
-        UpdateLastName = tContact.LastName;
-        UpdateEmail = tContact.Email;
-        UpdatePhoneNumber = tContact.PhoneNumber;
+            UpdateFirstName = tContact.FirstName;
+            UpdateLastName = tContact.LastName;
+            UpdateEmail = tContact.Email;
+            UpdatePhoneNumber = tContact.PhoneNumber;
+
+        } catch (Exception e) {
+            Debug.WriteLine(e);
+        }
     }
 
     [RelayCommand]
     public void UpdateContact() {
 
-        var tContact = SelectedContact as Contact;
+        try {
 
-        var updatedContact = new Contact {
-            FirstName = UpdateFirstName,
-            LastName = UpdateLastName,
-            Email = UpdateEmail,
-            PhoneNumber = UpdatePhoneNumber,
-        };
-        _contactService!.UpdateContact(tContact.Email, updatedContact);
-        _contactService.SaveContactsToFile();
-        RefreshList();
+            var c = SelectedContact as Contact;
+
+            var updatedContact = new Contact {
+                FirstName = UpdateFirstName,
+                LastName = UpdateLastName,
+                Email = UpdateEmail,
+                PhoneNumber = UpdatePhoneNumber,
+            };
+            _contactService!.UpdateContact(c!.Email, updatedContact);
+            _contactService.SaveContactsToFile();
+            RefreshList();
+
+        } catch (Exception e) {
+            Debug.WriteLine(e);
+        }
     }
 
     [RelayCommand]
-    public void RemovalConfirmation() {
-        PaneOutRemove = !PaneOutRemove;
+    public void ToggleRemovalConfirmation() {
+        if (SelectedContact == null)
+            return;
+
+        PaneOutRemove = true;
     }
 
     [RelayCommand]
     public void RemoveContact() {
-        if (SelectedContact == null)
-            return;
+        try {
+            if (SelectedContact == null)
+                return;
 
-        var c = SelectedContact as Contact;
-        _contactService!.RemoveContact(c.Email);
-        _contactService.SaveContactsToFile();
-        RefreshList();
+            var c = SelectedContact as Contact;
+            if (_contactService!.RemoveContact(c!.Email)) {
+                _contactService.SaveContactsToFile();
+
+                CheckboxConfirmRemove = false;
+                PaneOutRemove = false;
+
+                RefreshList();
+            }
+
+        } catch (Exception e) {
+            Debug.WriteLine(e);
+        }
     }
 
     #endregion
@@ -181,5 +213,6 @@ public partial class MainViewModel : ViewModelBase {
         PaneOutAdd = false;
         PaneOutView = false;
         PaneOutUpdate = false;
+        PaneOutRemove = false;
     }
 }
